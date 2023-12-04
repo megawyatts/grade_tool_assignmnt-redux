@@ -26,17 +26,23 @@ class MyApp extends StatelessWidget{
 class MyAppState extends ChangeNotifier{
   String userGradeLetter='';
   final gradeCalculator=GradeCalculator();
+  String resultText=('Your grade is a ');
   void calculateGrade(TextEditingController gradeController){
     String gradeInputAsString= gradeController.text;
     int gradeInputAsInt=int.parse(gradeInputAsString);
     userGradeLetter=gradeCalculator.defineGrade(gradeInputAsInt);
+    updateGrade();
     notifyListeners();
   }
-  String updateGrade(){
-    String resultText=('Your grade is a $userGradeLetter');
+  void updateGrade(){
+    resultText=('Your grade is a $userGradeLetter');
     notifyListeners();
-    return (resultText);
   }
+  @override
+  void notifyListeners() {
+    super.notifyListeners();
+  }
+
 }
 class MyHomeApp extends StatelessWidget {
   const MyHomeApp({super.key});
@@ -44,6 +50,7 @@ class MyHomeApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appState=context.watch<MyAppState>();
+    String resultText=appState.resultText;
     TextEditingController gradeController= TextEditingController();
     Widget enterButton = Padding(
         padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -71,7 +78,7 @@ class MyHomeApp extends StatelessWidget {
         }, child:
         Container(
             padding: const EdgeInsets.all(32),
-            child: Text(appState.updateGrade()),),
+            child: Text(resultText),),
 
     ),],);
     return MaterialApp(
